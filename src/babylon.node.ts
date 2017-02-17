@@ -72,13 +72,16 @@ module BABYLON {
         * An event triggered when the mesh is disposed.
         * @type {BABYLON.Observable}
         */
-        public onDisposeObservable = new Observable<Node>();
+        public onDisposeObservable: Observable<Node>;
 
         private _onDisposeObserver: Observer<Node>;
         public set onDispose(callback: () => void) {
             if (this._onDisposeObserver) {
                 this.onDisposeObservable.remove(this._onDisposeObserver);
             }
+            if (!this.onDisposeObservable)
+                this.onDisposeObservable = new Observable<Node>();
+
             this._onDisposeObserver = this.onDisposeObservable.add(callback);
         }
 
@@ -87,12 +90,36 @@ module BABYLON {
          * @param {string} name - the name and id to be given to this node
          * @param {BABYLON.Scene} the scene this node will be added to
          */
-        constructor(name: string, scene: Scene) {
+        constructor(name: string, scene: Scene, lite: boolean = false) {
             this.name = name;
             this.id = name;
             this._scene = scene;
+
             this._initCache();
+
+            if (!lite)
+            {
+                this._initDefaults();
+            }
         }
+
+        public static _initStatic() {
+            Node.prototype.state = "";
+            Node.prototype.metadata = null;
+            Node.prototype.doNotSerialize = false;
+            Node.prototype._childrenFlag = -1;
+            Node.prototype._isEnabled = true;
+            Node.prototype._isReady = true;
+            Node.prototype._currentRenderId = -1;
+            Node.prototype._parentRenderId = -1;
+        }
+
+        private _initDefaults() {
+            // todo: make these on-demand.
+            this.animations = new Array();
+            this._ranges = {};
+        }
+        
 
         public getScene(): Scene {
             return this._scene;
@@ -360,9 +387,12 @@ module BABYLON {
         public dispose(): void {
             this.parent = null;
 
-            // Callback
-            this.onDisposeObservable.notifyObservers(this);
-            this.onDisposeObservable.clear();
+            if (this.onDisposeObservable)
+            {
+                // Callback
+                this.onDisposeObservable.notifyObservers(this);
+                this.onDisposeObservable.clear();
+            }
         }
         
         public static ParseAnimationRanges(node: Node, parsedNode: any, scene: Scene): void {
@@ -374,4 +404,5 @@ module BABYLON {
             }
         }
     }
+    Node._initStatic();
 } 

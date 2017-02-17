@@ -154,7 +154,7 @@
                     for (index = 0; index < meshes.length; index++) {
                         var mesh = meshes.data[index];
 
-                        var position = mesh.getBoundingInfo().boundingSphere.center;
+                        var position = mesh.getBoundingInfo() ? mesh.getBoundingInfo().boundingSphere.center : mesh.absolutePosition;
                         projectedPosition = Vector3.Project(position, mesh.getWorldMatrix(), this._transformationMatrix, globalViewport);
                         if (mesh.renderOverlay || this.shouldDisplayAxis && this.shouldDisplayAxis(mesh)) {
                             this._renderAxis(projectedPosition, mesh, globalViewport);

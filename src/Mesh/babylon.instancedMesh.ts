@@ -8,12 +8,15 @@
         private _currentLOD: Mesh;
 
         constructor(name: string, source: Mesh) {
-            super(name, source.getScene());
+            super(name, source.getScene(), true);
 
             source.instances.push(this);
 
             this._sourceMesh = source;
 
+            this.position = Vector3.Zero();
+            this.rotation = Vector3.Zero();
+            this.scaling = Vector3.Zero();
             this.position.copyFrom(source.position);
             this.rotation.copyFrom(source.rotation);
             this.scaling.copyFrom(source.scaling);
@@ -24,10 +27,10 @@
 
             this.infiniteDistance = source.infiniteDistance;
 
-            this.setPivotMatrix(source.getPivotMatrix());
+/*            this.setPivotMatrix(source.getPivotMatrix());
 
             this.refreshBoundingInfo();
-            this._syncSubMeshes();
+            this._syncSubMeshes();*/
         }
 
         // Methods
@@ -96,14 +99,21 @@
         }
 
         public getLOD(camera: Camera): AbstractMesh {
-            this._currentLOD = <Mesh>this.sourceMesh.getLOD(this.getScene().activeCamera, this.getBoundingInfo().boundingSphere);
+            this._currentLOD = <Mesh>this.sourceMesh;
+            return this;
+            
+          /*  this._currentLOD = <Mesh>this.sourceMesh.getLOD(this.getScene().activeCamera, this.getBoundingInfo().boundingSphere);
 
             if (this._currentLOD === this.sourceMesh) {
                 return this;
             }
 
-            return this._currentLOD;
+            return this._currentLOD;*/
         }
+
+        public _updateBoundingInfo(): void {
+        }
+
 
         public _syncSubMeshes(): void {
             this.releaseSubMeshes();

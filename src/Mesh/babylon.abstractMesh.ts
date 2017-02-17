@@ -33,13 +33,17 @@
         * An event triggered when this mesh collides with another one
         * @type {BABYLON.Observable}
         */
-        public onCollideObservable = new Observable<AbstractMesh>();
+        public onCollideObservable : Observable<AbstractMesh>;
 
         private _onCollideObserver: Observer<AbstractMesh>;
         public set onCollide(callback: () => void) {
             if (this._onCollideObserver) {
                 this.onCollideObservable.remove(this._onCollideObserver);
             }
+            if (!this.onCollideObservable) {
+                this.onCollideObservable = new Observable<AbstractMesh>();
+            }
+
             this._onCollideObserver = this.onCollideObservable.add(callback);
         }
 
@@ -47,12 +51,15 @@
         * An event triggered when the collision's position changes
         * @type {BABYLON.Observable}
         */
-        public onCollisionPositionChangeObservable = new Observable<Vector3>();
+        public onCollisionPositionChangeObservable : Observable<Vector3>;
 
         private _onCollisionPositionChangeObserver: Observer<Vector3>;
         public set onCollisionPositionChange(callback: () => void) {
             if (this._onCollisionPositionChangeObserver) {
                 this.onCollisionPositionChangeObservable.remove(this._onCollisionPositionChangeObserver);
+            }
+            if (!this.onCollisionPositionChangeObservable) {
+                this.onCollisionPositionChangeObservable = new Observable<Vector3>();
             }
             this._onCollisionPositionChangeObserver = this.onCollisionPositionChangeObservable.add(callback);
         }
@@ -61,46 +68,46 @@
         * An event triggered after the world matrix is updated
         * @type {BABYLON.Observable}
         */
-        public onAfterWorldMatrixUpdateObservable = new Observable<AbstractMesh>();
+        public onAfterWorldMatrixUpdateObservable : Observable<AbstractMesh>;
 
         // Properties
-        public definedFacingForward = true; // orientation for POV movement & rotation
-        public position = new Vector3(0, 0, 0);
-        private _rotation = new Vector3(0, 0, 0);
+        public definedFacingForward: boolean; // orientation for POV movement & rotation
+        public position: Vector3;
+        private _rotation: Vector3;
         public _rotationQuaternion: Quaternion;
-        private _scaling = new Vector3(1, 1, 1);
-        public billboardMode = AbstractMesh.BILLBOARDMODE_NONE;
-        public visibility = 1.0;
-        public alphaIndex = Number.MAX_VALUE;
-        public infiniteDistance = false;
-        public isVisible = true;
-        public isPickable = true;
-        public showBoundingBox = false;
-        public showSubMeshesBoundingBox = false;
-        public isBlocker = false;
-        public renderingGroupId = 0;
+        private _scaling: Vector3;
+        public billboardMode: number;
+        public visibility: number;
+        public alphaIndex: number;
+        public infiniteDistance: boolean;
+        public isVisible: boolean;
+        public isPickable: boolean;
+        public showBoundingBox: boolean;
+        public showSubMeshesBoundingBox: boolean;
+        public isBlocker: boolean;
+        public renderingGroupId: number;
         public material: Material;
-        public receiveShadows = false;
-        public renderOutline = false;
-        public outlineColor = Color3.Red();
-        public outlineWidth = 0.02;
-        public renderOverlay = false;
-        public overlayColor = Color3.Red();
-        public overlayAlpha = 0.5;
-        public hasVertexAlpha = false;
-        public useVertexColors = true;
-        public applyFog = true;
-        public computeBonesUsingShaders = true;
-        public scalingDeterminant = 1;
-        public numBoneInfluencers = 4;
+        public receiveShadows: boolean;
+        public renderOutline: boolean;
+        public outlineColor: Color3;
+        public outlineWidth: number;
+        public renderOverlay: boolean;
+        public overlayColor: Color3;
+        public overlayAlpha: number;
+        public hasVertexAlpha: boolean;
+        public useVertexColors: boolean;
+        public applyFog: boolean;
+        public computeBonesUsingShaders: boolean;
+        public scalingDeterminant: number;
+        public numBoneInfluencers: number;
 
-        public useOctreeForRenderingSelection = true;
-        public useOctreeForPicking = true;
-        public useOctreeForCollisions = true;
+        public useOctreeForRenderingSelection: boolean;
+        public useOctreeForPicking: boolean;
+        public useOctreeForCollisions: boolean;
 
-        public layerMask: number = 0x0FFFFFFF;
+        public layerMask: number;
 
-        public alwaysSelectAsActiveMesh = false;
+        public alwaysSelectAsActiveMesh: boolean;
 
         /**
          * This scene's action manager
@@ -114,46 +121,46 @@
         public onPhysicsCollide: (collidedMesh: AbstractMesh, contact: any) => void;
 
         // Collisions
-        private _checkCollisions = false;
-        public ellipsoid = new Vector3(0.5, 1, 0.5);
-        public ellipsoidOffset = new Vector3(0, 0, 0);
-        private _collider = new Collider();
-        private _oldPositionForCollisions = new Vector3(0, 0, 0);
-        private _diffPositionForCollisions = new Vector3(0, 0, 0);
-        private _newPositionForCollisions = new Vector3(0, 0, 0);
+        private _checkCollisions : boolean;
+        public ellipsoid : Vector3;
+        public ellipsoidOffset : Vector3;
+        private _collider : Collider;
+        private _oldPositionForCollisions : Vector3;
+        private _diffPositionForCollisions : Vector3;
+        private _newPositionForCollisions : Vector3;
 
         // Attach to bone
         private _meshToBoneReferal: AbstractMesh;
 
         // Edges
-        public edgesWidth = 1;
-        public edgesColor = new Color4(1, 0, 0, 1);
+        public edgesWidth: number;
+        public edgesColor: Color4;
         public _edgesRenderer: EdgesRenderer;
 
         // Cache
-        private _localWorld = Matrix.Zero();
-        public _worldMatrix = Matrix.Zero();
-        private _rotateYByPI = Matrix.RotationY(Math.PI);
-        private _absolutePosition = Vector3.Zero();
-        private _collisionsTransformMatrix = Matrix.Zero();
-        private _collisionsScalingMatrix = Matrix.Zero();
+        private _localWorld: Matrix;
+        public _worldMatrix: Matrix;
+        private _rotateYByPI: Matrix;
+        private _absolutePosition: Vector3;
+        private _collisionsTransformMatrix: Matrix;
+        private _collisionsScalingMatrix: Matrix;
         public _positions: Vector3[];
-        private _isDirty = false;
+        private _isDirty: boolean;
         public _masterMesh: AbstractMesh;
         public _materialDefines: MaterialDefines;
 
         public _boundingInfo: BoundingInfo;
-        private _pivotMatrix = Matrix.Identity();
-        public _isDisposed = false;
-        public _renderId = 0;
+        private _pivotMatrix: Matrix;
+        public _isDisposed: boolean;
+        public _renderId: number;
 
         public subMeshes: SubMesh[];
         public _submeshesOctree: Octree<SubMesh>;
-        public _intersectionsInProgress = new Array<AbstractMesh>();
+        public _intersectionsInProgress: Array<AbstractMesh>;
 
-        private _isWorldMatrixFrozen = false;
+        private _isWorldMatrixFrozen: boolean;
 
-        public _unIndexed = false;
+        public _unIndexed: boolean;
 
         public _poseMatrix: Matrix;
 
@@ -186,10 +193,166 @@
         }
 
         // Constructor
-        constructor(name: string, scene: Scene) {
-            super(name, scene);
+        constructor(name: string, scene: Scene, lite: boolean = false) {
+            super(name, scene, lite);
+
+            if (!lite) {
+                this._initDefaultsAbstractMesh();
+            }
+
+            // Cache
+            this._localWorld = BABYLON.Matrix.Zero();
+            this._worldMatrix = BABYLON.Matrix.Zero();
+            this._absolutePosition = BABYLON.Vector3.Zero();
+
 
             scene.addMesh(this);
+
+        }
+        public static _initStaticAbstractMesh()
+        {
+            AbstractMesh.prototype.definedFacingForward = true; // orientation for POV movement & rotation
+            AbstractMesh.prototype.billboardMode = AbstractMesh.BILLBOARDMODE_NONE;
+            AbstractMesh.prototype.visibility = 1.0;
+            AbstractMesh.prototype.alphaIndex = Number.MAX_VALUE;
+            AbstractMesh.prototype.infiniteDistance = false;
+            AbstractMesh.prototype.isVisible = true;
+            AbstractMesh.prototype.isPickable = true;
+            AbstractMesh.prototype.showBoundingBox = false;
+            AbstractMesh.prototype.showSubMeshesBoundingBox = false;
+            AbstractMesh.prototype.isBlocker = false;
+            AbstractMesh.prototype.renderingGroupId = 0;
+            AbstractMesh.prototype.receiveShadows = false;
+            AbstractMesh.prototype.renderOutline = false;
+            AbstractMesh.prototype.outlineWidth = 0.02;
+            AbstractMesh.prototype.renderOverlay = false;
+            AbstractMesh.prototype.overlayAlpha = 0.5;
+            AbstractMesh.prototype.hasVertexAlpha = false;
+            AbstractMesh.prototype.useVertexColors = true;
+            AbstractMesh.prototype.applyFog = true;
+            AbstractMesh.prototype.computeBonesUsingShaders = true;
+            AbstractMesh.prototype.scalingDeterminant = 1;
+            AbstractMesh.prototype.numBoneInfluencers = 4;
+            AbstractMesh.prototype.useOctreeForRenderingSelection = true;
+            AbstractMesh.prototype.useOctreeForPicking = true;
+            AbstractMesh.prototype.useOctreeForCollisions = true;
+            AbstractMesh.prototype.layerMask = 0x0FFFFFFF;
+            AbstractMesh.prototype.alwaysSelectAsActiveMesh = false;
+            // Collisions
+            AbstractMesh.prototype._checkCollisions = false;
+            // Edges
+            AbstractMesh.prototype.edgesWidth = 1;
+            // Cache
+            AbstractMesh.prototype._isDirty = false;
+            AbstractMesh.prototype._isDisposed = false;
+            AbstractMesh.prototype._renderId = 0;
+            AbstractMesh.prototype._isWorldMatrixFrozen = false;
+            AbstractMesh.prototype._unIndexed = false;
+            AbstractMesh.prototype._onCollisionPositionChange = function (collisionId, newPosition, collidedMesh) {
+                if (collidedMesh === void 0) { collidedMesh = null; }
+                //TODO move this to the collision coordinator!
+                if (this.getScene().workerCollisions)
+                    newPosition.multiplyInPlace(this._collider.radius);
+                newPosition.subtractToRef(this._oldPositionForCollisions, this._diffPositionForCollisions);
+                if (this._diffPositionForCollisions.length() > BABYLON.Engine.CollisionsEpsilon) {
+                    this.position.addInPlace(this._diffPositionForCollisions);
+                }
+                if (collidedMesh) {
+                    this.onCollideObservable.notifyObservers(collidedMesh);
+                }
+                this.onCollisionPositionChangeObservable.notifyObservers(this.position);
+            };
+
+        }
+
+        private _initDefaultsAbstractMesh()
+        {
+            // Events
+            /**
+            * An event triggered when this mesh collides with another one
+            * @type {BABYLON.Observable}
+            */
+            this.onCollideObservable = new BABYLON.Observable();
+            /**
+            * An event triggered when the collision's position changes
+            * @type {BABYLON.Observable}
+            */
+            this.onCollisionPositionChangeObservable = new BABYLON.Observable();
+            /**
+            * An event triggered after the world matrix is updated
+            * @type {BABYLON.Observable}
+            */
+            this.onAfterWorldMatrixUpdateObservable = new BABYLON.Observable();
+            // Properties
+            this.definedFacingForward = true; // orientation for POV movement & rotation
+            this.position = new BABYLON.Vector3(0, 0, 0);
+            this._rotation = new BABYLON.Vector3(0, 0, 0);
+            this._scaling = new BABYLON.Vector3(1, 1, 1);
+            this.billboardMode = AbstractMesh.BILLBOARDMODE_NONE;
+            this.visibility = 1.0;
+            this.alphaIndex = Number.MAX_VALUE;
+            this.infiniteDistance = false;
+            this.isVisible = true;
+            this.isPickable = true;
+            this.showBoundingBox = false;
+            this.showSubMeshesBoundingBox = false;
+            this.isBlocker = false;
+            this.renderingGroupId = 0;
+            this.receiveShadows = false;
+            this.renderOutline = false;
+            this.outlineColor = BABYLON.Color3.Red();
+            this.outlineWidth = 0.02;
+            this.renderOverlay = false;
+            this.overlayColor = BABYLON.Color3.Red();
+            this.overlayAlpha = 0.5;
+            this.hasVertexAlpha = false;
+            this.useVertexColors = true;
+            this.applyFog = true;
+            this.computeBonesUsingShaders = true;
+            this.scalingDeterminant = 1;
+            this.numBoneInfluencers = 4;
+            this.useOctreeForRenderingSelection = true;
+            this.useOctreeForPicking = true;
+            this.useOctreeForCollisions = true;
+            this.layerMask = 0x0FFFFFFF;
+            this.alwaysSelectAsActiveMesh = false;
+            // Collisions
+            this._checkCollisions = false;
+            this.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
+            this.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
+            this._collider = new BABYLON.Collider();
+            this._oldPositionForCollisions = new BABYLON.Vector3(0, 0, 0);
+            this._diffPositionForCollisions = new BABYLON.Vector3(0, 0, 0);
+            this._newPositionForCollisions = new BABYLON.Vector3(0, 0, 0);
+            // Edges
+            this.edgesWidth = 1;
+            this.edgesColor = new BABYLON.Color4(1, 0, 0, 1);
+            // Cache
+            this._rotateYByPI = BABYLON.Matrix.RotationY(Math.PI);
+            this._collisionsTransformMatrix = BABYLON.Matrix.Zero();
+            this._collisionsScalingMatrix = BABYLON.Matrix.Zero();
+            this._isDirty = false;
+            this._pivotMatrix = BABYLON.Matrix.Identity();
+            this._isDisposed = false;
+            this._renderId = 0;
+            this._intersectionsInProgress = new Array();
+            this._isWorldMatrixFrozen = false;
+            this._unIndexed = false;
+            this._onCollisionPositionChange = function (collisionId, newPosition, collidedMesh) {
+                if (collidedMesh === void 0) { collidedMesh = null; }
+                //TODO move this to the collision coordinator!
+                if (this.getScene().workerCollisions)
+                    newPosition.multiplyInPlace(this._collider.radius);
+                newPosition.subtractToRef(this._oldPositionForCollisions, this._diffPositionForCollisions);
+                if (this._diffPositionForCollisions.length() > BABYLON.Engine.CollisionsEpsilon) {
+                    this.position.addInPlace(this._diffPositionForCollisions);
+                }
+                if (collidedMesh) {
+                    this.onCollideObservable.notifyObservers(collidedMesh);
+                }
+                this.onCollisionPositionChangeObservable.notifyObservers(this.position);
+            };
+
         }
 
         /**
@@ -622,8 +785,13 @@
             }
 
             // Composing transformations
-            this._pivotMatrix.multiplyToRef(Tmp.Matrix[1], Tmp.Matrix[4]);
-            Tmp.Matrix[4].multiplyToRef(Tmp.Matrix[0], Tmp.Matrix[5]);
+            if (this._pivotMatrix) {
+                this._pivotMatrix.multiplyToRef(Tmp.Matrix[1], Tmp.Matrix[4]);
+                Tmp.Matrix[4].multiplyToRef(Tmp.Matrix[0], Tmp.Matrix[5]);
+            }
+            else {
+                Tmp.Matrix[1].multiplyToRef(Tmp.Matrix[0], Tmp.Matrix[5]);
+            }
 
             // Billboarding
             if (this.billboardMode !== AbstractMesh.BILLBOARDMODE_NONE && this.getScene().activeCamera) {
@@ -694,7 +862,8 @@
             this._absolutePosition.copyFromFloats(this._worldMatrix.m[12], this._worldMatrix.m[13], this._worldMatrix.m[14]);
 
             // Callbacks
-            this.onAfterWorldMatrixUpdateObservable.notifyObservers(this);
+            if (this.onAfterWorldMatrixUpdateObservable)
+                this.onAfterWorldMatrixUpdateObservable.notifyObservers(this);
 
             if (!this._poseMatrix) {
                 this._poseMatrix = Matrix.Invert(this._worldMatrix);
@@ -708,6 +877,10 @@
         * @param func: callback function to add
         */
         public registerAfterWorldMatrixUpdate(func: (mesh: AbstractMesh) => void): void {
+            if (!this.onAfterWorldMatrixUpdateObservable) {
+                this.onAfterWorldMatrixUpdateObservable = new Observable<AbstractMesh>();
+            }
+      
             this.onAfterWorldMatrixUpdateObservable.add(func);
         }
 
@@ -773,11 +946,11 @@
         }
 
         public isInFrustum(frustumPlanes: Plane[]): boolean {
-            return this._boundingInfo.isInFrustum(frustumPlanes);
+            return !this._boundingInfo || this._boundingInfo.isInFrustum(frustumPlanes);
         }
 
         public isCompletelyInFrustum(frustumPlanes: Plane[]): boolean {
-            return this._boundingInfo.isCompletelyInFrustum(frustumPlanes);;
+            return !this._boundingInfo ||this._boundingInfo.isCompletelyInFrustum(frustumPlanes);;
         }
 
         public intersectsMesh(mesh: AbstractMesh | SolidParticle, precise?: boolean): boolean {
@@ -912,23 +1085,7 @@
             this.getScene().collisionCoordinator.getNewPosition(this._oldPositionForCollisions, velocity, this._collider, 3, this, this._onCollisionPositionChange, this.uniqueId);
         }
 
-        private _onCollisionPositionChange = (collisionId: number, newPosition: Vector3, collidedMesh: AbstractMesh = null) => {
-            //TODO move this to the collision coordinator!
-            if (this.getScene().workerCollisions)
-                newPosition.multiplyInPlace(this._collider.radius);
-
-            newPosition.subtractToRef(this._oldPositionForCollisions, this._diffPositionForCollisions);
-
-            if (this._diffPositionForCollisions.length() > Engine.CollisionsEpsilon) {
-                this.position.addInPlace(this._diffPositionForCollisions);
-            }
-
-            if (collidedMesh) {
-                this.onCollideObservable.notifyObservers(collidedMesh);
-            }
-
-            this.onCollisionPositionChangeObservable.notifyObservers(this.position);
-        }
+        private _onCollisionPositionChange : (collisionId: number, newPosition: Vector3, collidedMesh: AbstractMesh) => void
 
         // Submeshes octree
 
@@ -1207,26 +1364,26 @@
             super.dispose();
         }
 
-        public getDirection(localAxis:Vector3): Vector3 {
+        public getDirection(localAxis: Vector3): Vector3 {
             var result = Vector3.Zero();
 
             this.getDirectionToRef(localAxis, result);
-            
+
             return result;
         }
 
-        public getDirectionToRef(localAxis:Vector3, result:Vector3): void {
+        public getDirectionToRef(localAxis: Vector3, result: Vector3): void {
             Vector3.TransformNormalToRef(localAxis, this.getWorldMatrix(), result);
         }
 
-        public setPivotPoint(point:Vector3, space:Space = Space.LOCAL): void{
+        public setPivotPoint(point: Vector3, space: Space = Space.LOCAL): void {
 
-            if(this.getScene().getRenderId() == 0){
+            if (this.getScene().getRenderId() == 0) {
                 this.computeWorldMatrix(true);
             }
 
             var wm = this.getWorldMatrix();
-            
+
             if (space == Space.WORLD) {
                 var tmat = Tmp.Matrix[0];
                 wm.invertToRef(tmat);
@@ -1253,7 +1410,7 @@
 
         }
 
-        public getPivotPointToRef(result:Vector3): void{
+        public getPivotPointToRef(result: Vector3): void {
 
             result.x = -this._pivotMatrix.m[12];
             result.y = -this._pivotMatrix.m[13];
@@ -1271,7 +1428,7 @@
 
         }
 
-        public getAbsolutePivotPointToRef(result:Vector3): void{
+        public getAbsolutePivotPointToRef(result: Vector3): void {
 
             result.x = this._pivotMatrix.m[12];
             result.y = this._pivotMatrix.m[13];
@@ -1284,4 +1441,6 @@
         }
 
     }
+
+    AbstractMesh._initStaticAbstractMesh();
 }
