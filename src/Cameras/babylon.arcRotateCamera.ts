@@ -1,5 +1,6 @@
 ﻿/// <reference path="babylon.targetCamera.ts" />
 /// <reference path="..\Tools\babylon.tools.ts" />
+/// <reference path="..\Math\babylon.math.ts" />
 
 module BABYLON {
     export class ArcRotateCamera extends TargetCamera {

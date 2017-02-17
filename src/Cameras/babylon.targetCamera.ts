@@ -1,4 +1,5 @@
 ﻿/// <reference path="babylon.camera.ts" />
+/// <reference path="..\Math\babylon.math.ts" />
 
 module BABYLON {
     export class TargetCamera extends Camera {
